@@ -1,19 +1,83 @@
 import './css/styles.css';
-// var debounce = require('lodash.debounce');
-
 import debounce from 'lodash.debounce';
-
 import Notiflix from 'notiflix';
+import API from './fetchCountries';
 
 const DEBOUNCE_DELAY = 300;
 
+const inputEl = document.querySelector('#search-box');
+const ulEl = document.querySelector('.country-list');
+const countryInfoEl = document.querySelector('.country-info');
 
-fetch('https://restcountries.com/v2/all?fields=name.official,capital,population,flags.svg,languages').then(response => response.json).then(data => console.log(data)).catch(error => console.log(error));
+inputEl.addEventListener('input', debounce(handleSearchCountry, DEBOUNCE_DELAY));
+
+function handleSearchCountry() {
+    const inputValue = inputEl.value.trim();
+
+    if (!inputValue) {
+        return;
+    }
+    
+        API.fetchCountries(inputValue).then((data) => 
+        {
+            if (data.length > 10) {
+                Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+                console.log(data)
+            }
+    
+            if (data.length <= 10 && data.length > 2){
+                ulEl.innerHTML = "";
+                countryInfoEl.innerHTML = "";
+                createMarkup(data);
+            }
+    
+            if (data.length === 1) {
+                ulEl.innerHTML = "";
+                countryInfoEl.innerHTML = "";
+                createInfoCountryMarkup(data)
+            }
+
+            
+        }
+       )
+        .catch ((error) => Notiflix.Notify.failure('Oops, there is no country with that name'));
+    };
+
+const createListItem =(item) => 
+    ` <img src="${item.flags.svg}" alt="{item.name.official}" width="40" height="40">
+    <h2>${item.name.official}</h2>`
+;
+
+const createArrayItem = (array) => 
+    array.reduce((acc, item) => acc + createListItem(item), "")
+;
+
+const createMarkup = (array) => {
+    const result = createArrayItem(array);
+    ulEl.insertAdjacentHTML('beforeend', result);
+};
+
+const createInfoCountryItem = (item) =>
+    ` <img src="${item.flags.svg}" alt="{item.name.official}" width="40" height="40">
+    <h2>${item.name.official}</h2>
+    <p>Capital: ${item.capital}</p>
+    <p>Population: ${item.population}</p>
+    <p>Languages: ${(Object.values(item.languages).join())}</p>
+    `;
+
+const createArrayInfoCountryItem = (array) => 
+    array.reduce((acc, item) => acc + createInfoCountryItem(item), "")
+;
+
+const createInfoCountryMarkup = (array) => {
+    const result = createArrayInfoCountryItem(array);
+    countryInfoEl.insertAdjacentHTML('beforeend', result);
+};
 
 
 
 
 
-// https://restcountries.com/v2/all?fields=name.official,capital,population,flags.svg,languages
 
-// https://restcountries.com/v3.1/all
+
+
