@@ -15,6 +15,8 @@ function handleSearchCountry() {
     const inputValue = inputEl.value.trim();
 
     if (!inputValue) {
+        ulEl.innerHTML = "";
+        countryInfoEl.innerHTML = "";
         return;
     }
     
@@ -22,7 +24,6 @@ function handleSearchCountry() {
         {
             if (data.length > 10) {
                 Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
-                console.log(data)
             }
     
             if (data.length <= 10 && data.length > 2){
@@ -35,9 +36,7 @@ function handleSearchCountry() {
                 ulEl.innerHTML = "";
                 countryInfoEl.innerHTML = "";
                 createInfoCountryMarkup(data)
-            }
-
-            
+            }  
         }
        )
         .catch ((error) => Notiflix.Notify.failure('Oops, there is no country with that name'));

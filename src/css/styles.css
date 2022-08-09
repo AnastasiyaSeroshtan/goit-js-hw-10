@@ -24,6 +24,10 @@ h2 {
   margin-top: 0;
 }
 
+ul {
+  padding: 0;
+}
+
 .country-contaiter {
   display: flex;
   align-items: center;
