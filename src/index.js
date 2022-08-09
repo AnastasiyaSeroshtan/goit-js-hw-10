@@ -44,8 +44,10 @@ function handleSearchCountry() {
     };
 
 const createListItem =(item) => 
-    ` <img src="${item.flags.svg}" alt="{item.name.official}" width="40" height="40">
-    <h2>${item.name.official}</h2>`
+    `<div class="country-contaiter"> 
+    <img class="country-img" src="${item.flags.svg}" alt="{item.name.official}" width="40" height="40">
+    <h2>${item.name.official}</h2>
+    </div>`
 ;
 
 const createArrayItem = (array) => 
@@ -58,11 +60,13 @@ const createMarkup = (array) => {
 };
 
 const createInfoCountryItem = (item) =>
-    ` <img src="${item.flags.svg}" alt="{item.name.official}" width="40" height="40">
-    <h2>${item.name.official}</h2>
-    <p>Capital: ${item.capital}</p>
-    <p>Population: ${item.population}</p>
-    <p>Languages: ${(Object.values(item.languages).join())}</p>
+    ` <div class="country-contaiter">
+    <img class="country-img" src="${item.flags.svg}" alt="{item.name.official}" width="80" height="40">
+    <h2 class="country-title">${item.name.official}</h2>
+    </div>
+    <p><span class="description">Capital:</span> ${item.capital}</p>
+    <p><span class="description">Population:</span> ${item.population}</p>
+    <p><span class="description">Languages:</span> ${(Object.values(item.languages).join())}</p>
     `;
 
 const createArrayInfoCountryItem = (array) => 
